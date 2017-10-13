@@ -13,12 +13,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.mjbor.ready.R;
 import com.mjbor.ready.lastSeen.view.LastSeenFragment;
 import com.mjbor.ready.map.view.MyMapFragment;
 import com.mjbor.ready.service.OdometerService;
+import com.mjbor.ready.walk.view.WalkFragment;
 
 import java.util.List;
 
@@ -36,9 +38,9 @@ public class MainActivity extends AppCompatActivity
     private ViewPagerAdapter adapter;
     private MenuItem prevMenuItem;
 
-
     private MyMapFragment myMapFragment;
     private LastSeenFragment lastSeenFragment;
+    private WalkFragment walkFragment;
 
     private OdometerService odometer;
     private boolean bound = false;
@@ -57,6 +59,11 @@ public class MainActivity extends AppCompatActivity
     };
 
 
+    MainActivity.distanceListened listener;
+    public interface distanceListened{
+        public void onDistanceChanged(double distance);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +79,8 @@ public class MainActivity extends AppCompatActivity
         watchMileage();
     }
 
+
+
     private void watchMileage() {
         final Handler handler = new Handler();
         handler.post(new Runnable() {
@@ -81,11 +90,20 @@ public class MainActivity extends AppCompatActivity
                 if (odometer != null) {
                     distance = odometer.getDistance();
                 }
+
+
+
                 String distanceStr = String.format("%1$,.2f kilometra", distance);
                 distanceView.setText(distanceStr);
                 handler.postDelayed(this, 1000);
             }
         });
+    }
+
+
+    public void startButtonClicked(View v){
+        watchMileage();
+
     }
 
     @Override
@@ -109,6 +127,8 @@ public class MainActivity extends AppCompatActivity
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
         myMapFragment = new MyMapFragment();
         lastSeenFragment = new LastSeenFragment();
+        walkFragment = new WalkFragment();
+        listener = (distanceListened) walkFragment;
         adapter.addFragment(myMapFragment);
         adapter.addFragment(lastSeenFragment);
         viewPager.setAdapter(adapter);

@@ -12,4 +12,9 @@
     <string name="place_name">Nazwa miejsca</string>
     <string name="latitude">Szerokość geograficzna</string>
     <string name="longitude">Długość geograficzna</string>
+
+
+    <string name="start"> START </string>
+    
+
 </resources>

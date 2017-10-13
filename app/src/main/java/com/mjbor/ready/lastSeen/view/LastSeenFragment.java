@@ -1,7 +1,10 @@
 package com.mjbor.ready.lastSeen.view;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +16,7 @@ import com.mjbor.ready.R;
 import com.mjbor.ready.database.DbInteractor;
 import com.mjbor.ready.database.IRepository;
 import com.mjbor.ready.lastSeen.presenter.LastSeenPresenter;
+import com.mjbor.ready.service.OdometerService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,6 +64,7 @@ public class LastSeenFragment extends Fragment
 
         return view;
     }
+
 
 
     @Override
