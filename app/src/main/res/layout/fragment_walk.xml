@@ -9,7 +9,7 @@
     >
 
     <TextView
-        android:id="@+id/time"
+        android:id="@+id/timeTV"
         android:text="0:00:00"
         android:textSize="75dp"
         android:layout_width="match_parent"
@@ -18,8 +18,8 @@
 
 
     <TextView
-        android:layout_below="@+id/time"
-        android:id="@+id/distance"
+        android:layout_below="@+id/timeTV"
+        android:id="@+id/distanceTV"
         android:text="0.00 km"
         android:textSize="60dp"
         android:layout_width="match_parent"
@@ -29,8 +29,8 @@
 
 
     <TextView
-        android:layout_below="@+id/distance"
-        android:id="@+id/averageSpeed"
+        android:layout_below="@+id/distanceTV"
+        android:id="@+id/averageSpeedTV"
         android:text="0 km/h"
         android:textSize="60dp"
         android:layout_width="match_parent"

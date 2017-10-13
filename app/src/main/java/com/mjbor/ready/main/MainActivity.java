@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
     @BindView(R.id.viewpager) ViewPager viewPager;
-    @BindView(R.id.distance) TextView distanceView;
 
     private ViewPagerAdapter adapter;
     private MenuItem prevMenuItem;
@@ -91,10 +90,7 @@ public class MainActivity extends AppCompatActivity
                     distance = odometer.getDistance();
                 }
 
-
-
-                String distanceStr = String.format("%1$,.2f kilometra", distance);
-                distanceView.setText(distanceStr);
+                listener.onDistanceChanged(distance);
                 handler.postDelayed(this, 1000);
             }
         });
@@ -102,8 +98,7 @@ public class MainActivity extends AppCompatActivity
 
 
     public void startButtonClicked(View v){
-        watchMileage();
-
+        walkFragment.startTimer();
     }
 
     @Override
@@ -129,6 +124,8 @@ public class MainActivity extends AppCompatActivity
         lastSeenFragment = new LastSeenFragment();
         walkFragment = new WalkFragment();
         listener = (distanceListened) walkFragment;
+
+        adapter.addFragment(walkFragment);
         adapter.addFragment(myMapFragment);
         adapter.addFragment(lastSeenFragment);
         viewPager.setAdapter(adapter);
@@ -137,13 +134,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_map:
+            case R.id.action_walk:
                 viewPager.setCurrentItem(0);
                 item.setChecked(true);
-
                 break;
-            case R.id.action_last_seen:
+
+            case R.id.action_map:
                 viewPager.setCurrentItem(1);
+                item.setChecked(true);
+                break;
+
+            case R.id.action_last_seen:
+                viewPager.setCurrentItem(2);
                 item.setChecked(true);
                 break;
         }

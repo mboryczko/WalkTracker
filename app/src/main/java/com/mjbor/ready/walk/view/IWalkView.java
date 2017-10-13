@@ -5,4 +5,10 @@ package com.mjbor.ready.walk.view;
  */
 
 public interface IWalkView {
+
+    public void setDistance(String text);
+    public void setAverageSpeed(String text);
+    public void setTime(String text);
+
+    public void startTimer();
 }
