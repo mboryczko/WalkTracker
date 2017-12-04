@@ -1,7 +1,7 @@
 # WalkTracker
 
 <div style="width: 50%; margin: 0 auto ">
-  <img src="http://michalboryczko.pl/github/walkTracker/mock.png" alt="menu" width="1000" height="500">
+  <img src="http://michalboryczko.pl/github/walkTracker/mock.jpeg" alt="menu" width="1000" height="500">
 </div>
 
 
