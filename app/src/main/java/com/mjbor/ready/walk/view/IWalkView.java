@@ -10,5 +10,9 @@ public interface IWalkView {
     public void setAverageSpeed(String text);
     public void setTime(String text);
 
+
+    public void setActionButtonText(String text);
+
     public void startTimer();
+    public void stopTimer();
 }

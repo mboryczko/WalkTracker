@@ -1,49 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/placeLastSeenTV"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="15dp"
-            android:text="Nazwa miejsca"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/coordinatesTV"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginBottom="15dp"
-            android:text="231243.1.4214124 E, 412412.12312 N"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
 
 
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/dateLastWalkTV"
+        android:text="12 PAŹDZIERNIK 2017"
+        android:textSize="20dp"
+        android:layout_marginBottom="5dp"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:layout_marginLeft="5dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="right|center">
+        android:layout_height="wrap_content" />
 
-        <ImageView
-            android:src="@drawable/ic_chevron_right_black_24dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/distanceLastWalkTV"
+        android:layout_below="@+id/dateLastWalkTV"
+        android:layout_marginLeft="15dp"
+        android:drawableLeft="@drawable/ic_place_black_18dp"
+        android:text="12.33 km"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/timeLastWalkTV"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/distanceLastWalkTV"
+        android:layout_below="@+id/dateLastWalkTV"
+        android:drawableLeft="@drawable/ic_timer_black_18dp"
+        android:text="33:00"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/averageSpeedLastWalkTV"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/timeLastWalkTV"
+        android:layout_below="@+id/dateLastWalkTV"
+        android:drawableLeft="@drawable/ic_directions_run_black_18dp"
+        android:text="11.34 km/h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 
 
 
-</LinearLayout>
+
+</RelativeLayout>

@@ -1,7 +1,7 @@
 package com.mjbor.ready.map.view;
 
 
-import android.content.Intent;
+import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,10 +33,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.mjbor.ready.R;
-import com.mjbor.ready.details.view.DetailActivity;
 import com.mjbor.ready.map.presenter.MapPresenter;
-import com.mjbor.ready.model.Place;
-import com.mjbor.ready.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +42,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class MyMapFragment extends Fragment
-        implements IMapView, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+        implements IMapView, OnMapReadyCallback {
 
     private GoogleMap mMap;
     private SupportMapFragment mSupportMapFragment;
@@ -56,8 +54,6 @@ public class MyMapFragment extends Fragment
     private static final int DEFAULT_ZOOM = 15;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 777;
     private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
-
-    private TextView distanceTextView;
 
     private MapPresenter presenter;
 
@@ -102,26 +98,7 @@ public class MyMapFragment extends Fragment
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setOnMarkerClickListener(this);
         presenter.onMapReady();
-
-    }
-
-    @Override
-    public void startDetailActivity(Place place) {
-        Intent i = new Intent(getActivity(), DetailActivity.class);
-        i.putExtra(Constants.NAME, place.getName());
-        i.putExtra(Constants.AVATAR, place.getAvatar());
-        i.putExtra(Constants.LATITUDE, place.getLat());
-        i.putExtra(Constants.LONGITUDE, place.getLng());
-        i.putExtra(Constants.ID, place.getId());
-        startActivity(i);
-    }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        presenter.onMarkerClicked(marker);
-        return false;
     }
 
     @Override
@@ -192,39 +169,8 @@ public class MyMapFragment extends Fragment
                 }
             }
         }
-
-
-    }
-
-    @Override
-    public void showToast(String text) {
-        Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public List<Marker> addMarkers(List<LatLng> list) {
-        List<Marker> markers = new ArrayList<Marker>();
-        for(LatLng latLng : list){
-            Marker marker = mMap.addMarker(new MarkerOptions().position(latLng));
-            markers.add(marker);
-        }
-
-        return markers;
     }
 
 
-    @Override
-    public void moveCamera(List<Marker> markers){
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (Marker marker : markers) {
-            builder.include(marker.getPosition());
-        }
-        LatLngBounds bounds = builder.build();
-
-        int padding = 100;
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-        mMap.animateCamera(cu);
-
-    }
 
 }

@@ -3,6 +3,9 @@ package com.mjbor.ready.main;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
+
+import com.mjbor.ready.walk.view.WalkFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,4 +34,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         mFragmentList.add(fragment);
     }
 
+
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        Fragment fragment = (Fragment) super.instantiateItem(container, position);
+        mFragmentList.set(position, fragment);
+        return fragment;
+    }
 }

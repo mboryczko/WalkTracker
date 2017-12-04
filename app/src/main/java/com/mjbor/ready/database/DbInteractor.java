@@ -3,13 +3,9 @@ package com.mjbor.ready.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteStatement;
-import android.util.Log;
-
-import com.mjbor.ready.model.Place;
+import com.mjbor.ready.model.Walk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,59 +17,62 @@ import java.util.List;
 public class DbInteractor implements IRepository {
     private SQLiteDatabase db;
     private Context context;
+    private long lastIdInserted;
 
 
     public DbInteractor(Context context){
         this.context = context;
         SQLiteOpenHelper sqLiteOpenHelper = new AppDatabaseHelper(context);
         this.db = sqLiteOpenHelper.getWritableDatabase();
+
     }
 
     @Override
-    public void savePlace(Place place) {
-        List<Place> list = getAllPlaces();
-        for(Place p : list){
-            if(p.getId() == place.getId()){
-                Log.i("db", "already in db");
-                return;
-            }
+    public void saveWalk(Walk walk) {
+        ContentValues values = getContentValuesForWalk(walk);
+        this.lastIdInserted = db.insert(AppDatabaseHelper.TABLE_NAME, null, values);
+    }
 
-        }
 
+    @Override
+    public void updateLastWalk(Walk walk){
+        ContentValues values = getContentValuesForWalk(walk);
+        db.update(AppDatabaseHelper.TABLE_NAME, values, "_id="+lastIdInserted, null);
+    }
+
+
+    public ContentValues getContentValuesForWalk(Walk walk){
         ContentValues values = new ContentValues();
-        values.put(AppDatabaseHelper.ID, place.getId());
-        values.put(AppDatabaseHelper.AVATAR, place.getAvatar());
-        values.put(AppDatabaseHelper.LAT, place.getLat());
-        values.put(AppDatabaseHelper.LNG, place.getLng());
-        values.put(AppDatabaseHelper.NAME, place.getName());
+        values.put(AppDatabaseHelper.WALK_DATE, walk.getDate());
+        values.put(AppDatabaseHelper.AVERAGE_SPEED, walk.getAverageSpeed());
+        values.put(AppDatabaseHelper.DISTANCE, walk.getDistance());
+        values.put(AppDatabaseHelper.SECONDS, walk.getSeconds());
 
-        db.insert(AppDatabaseHelper.TABLE_NAME, null, values);
-
-
+        return values;
     }
 
     @Override
-    public List<Place> getAllPlaces() {
-        String sql = "select " + AppDatabaseHelper.ID + ", " +
-                AppDatabaseHelper.AVATAR + ", " +
-                AppDatabaseHelper.LAT + ", " +
-                AppDatabaseHelper.LNG + ", " +
-                AppDatabaseHelper.NAME +
+    public List<Walk> getAllWalks() {
+        String sql = "select " +
+                AppDatabaseHelper.AVERAGE_SPEED + ", " +
+                AppDatabaseHelper.DISTANCE + ", " +
+                AppDatabaseHelper.WALK_DATE + ", " +
+                AppDatabaseHelper.SECONDS +
+
                 " from " + AppDatabaseHelper.TABLE_NAME;
         Cursor cursor = db.rawQuery(sql, null);
-        List<Place> places = new ArrayList<>();
+        List<Walk> walks = new ArrayList<>();
 
 
         while(cursor.moveToNext()){
-            int id = cursor.getInt(0);
-            String avatar = cursor.getString(1);
-            double lat = cursor.getDouble(2);
-            double lng = cursor.getDouble(3);
-            String name = cursor.getString(4);
+            double averageSpeed = cursor.getDouble(0);
+            double distance = cursor.getDouble(1);
+            String date  = cursor.getString(2);
+            int seconds = cursor.getInt(3);
 
-            places.add(new Place(id, name, lng, avatar, lat));
+            walks.add(new Walk(distance, averageSpeed, seconds, date));
         }
 
-        return places;
+        return walks;
     }
 }

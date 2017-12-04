@@ -1,25 +1,35 @@
 package com.mjbor.ready.main;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.res.Configuration;
+import android.location.Location;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.mjbor.ready.R;
-import com.mjbor.ready.lastSeen.view.LastSeenFragment;
+import com.mjbor.ready.lastWalks.view.LastWalksFragment;
 import com.mjbor.ready.map.view.MyMapFragment;
 import com.mjbor.ready.service.OdometerService;
+import com.mjbor.ready.sessions.ISharedPreferencesManager;
+import com.mjbor.ready.sessions.SharedPreferencesManager;
+import com.mjbor.ready.walk.dialog.PreferencesDialog;
 import com.mjbor.ready.walk.view.WalkFragment;
 
 import java.util.List;
@@ -29,7 +39,8 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener,
-        ViewPager.OnPageChangeListener{
+        ViewPager.OnPageChangeListener,
+        PreferencesDialog.PreferencesListener{
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
     @BindView(R.id.viewpager) ViewPager viewPager;
@@ -38,11 +49,13 @@ public class MainActivity extends AppCompatActivity
     private MenuItem prevMenuItem;
 
     private MyMapFragment myMapFragment;
-    private LastSeenFragment lastSeenFragment;
+    private LastWalksFragment lastWalkFragment;
     private WalkFragment walkFragment;
 
+    private PreferencesDialog dialog;
     private OdometerService odometer;
     private boolean bound = false;
+    private boolean clicked = false;
 
     private ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -57,6 +70,22 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, OdometerService.class);
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (bound) {
+            unbindService(connection);
+            bound = false;
+        }
+    }
+
 
     MainActivity.distanceListened listener;
     public interface distanceListened{
@@ -70,14 +99,31 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
 
+
         //----------------------------------
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-        viewPager.addOnPageChangeListener(this);
         setupViewPager(viewPager);
 
-        watchMileage();
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+
+    }
+
+
+    public void settingsClicked(View v){
+        dialog = new PreferencesDialog();
+        dialog.show(getSupportFragmentManager(), "PreferencesDialog");
+    }
+
+    @Override
+    public void onDialogPositiveCheck(DialogFragment dialog) {
+        walkFragment.preferencesChanged();
+        lastWalkFragment.preferencesChanged();
+    }
 
 
     private void watchMileage() {
@@ -97,38 +143,42 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void startButtonClicked(View v){
-        walkFragment.startTimer();
-    }
+    public void actionButtonClicked(View v){
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Intent intent = new Intent(this, OdometerService.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
-    }
+        if(!clicked){
+            clicked = true;
+            odometer.setDistanceInMeters(0d);
+            watchMileage();
+            walkFragment.onStartClicked();
+        }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (bound) {
-            unbindService(connection);
-            bound = false;
+        else{
+            clicked = false;
+            odometer.setDistanceInMeters(0d);
+            walkFragment.onStopClicked();
         }
     }
+
+
+
+
+
+
 
 
     private void setupViewPager(ViewPager viewPager) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
         myMapFragment = new MyMapFragment();
-        lastSeenFragment = new LastSeenFragment();
+        lastWalkFragment = new LastWalksFragment();
         walkFragment = new WalkFragment();
         listener = (distanceListened) walkFragment;
 
         adapter.addFragment(walkFragment);
         adapter.addFragment(myMapFragment);
-        adapter.addFragment(lastSeenFragment);
+        adapter.addFragment(lastWalkFragment);
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(this);
+        viewPager.setOffscreenPageLimit(2);
     }
 
     @Override
@@ -163,8 +213,8 @@ public class MainActivity extends AppCompatActivity
 
         bottomNavigationView.getMenu().getItem(position).setChecked(true);
         prevMenuItem = bottomNavigationView.getMenu().getItem(position);
-        if(adapter.getItem(position) instanceof LastSeenFragment){
-            lastSeenFragment.onRefresh();
+        if(adapter.getItem(position) instanceof LastWalksFragment){
+            lastWalkFragment.onRefresh();
         }
 
 

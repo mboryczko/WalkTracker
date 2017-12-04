@@ -10,10 +10,8 @@ import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-
-import com.mjbor.ready.utils.Constants;
+import android.util.Log;
 
 public class OdometerService extends Service {
 
@@ -35,14 +33,22 @@ public class OdometerService extends Service {
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, listener);
+            Log.e("OdometerService", "permisssion granted");
         } else {
             //TODO
             //handle event when permissions were denied
+            Log.e("OdometerService", "permisssion denied");
         }
     }
 
+
+
     public double getDistance() {
         return this.distanceInMeters / 1000;
+    }
+
+    public void setDistanceInMeters(double distanceInMeters) {
+        OdometerService.distanceInMeters = distanceInMeters;
     }
 
     @Override
@@ -55,6 +61,7 @@ public class OdometerService extends Service {
                 }
                 distanceInMeters += location.distanceTo(lastLocation);
                 lastLocation = location;
+
             }
             @Override
             public void onProviderDisabled(String arg0) {}

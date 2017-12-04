@@ -1,6 +1,6 @@
 package com.mjbor.ready.database;
 
-import com.mjbor.ready.model.Place;
+import com.mjbor.ready.model.Walk;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface IRepository {
 
-    public void savePlace(Place place);
-    public List<Place> getAllPlaces();
+    public void updateLastWalk(Walk walk);
+    public void saveWalk(Walk walk);
+    public List<Walk> getAllWalks();
 }

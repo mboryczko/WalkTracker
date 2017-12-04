@@ -16,6 +16,14 @@
 
 
     <string name="start"> START </string>
+    <string name="stop"> STOP </string>
     
+    <string name="distance"> DYSTANS </string>
+    <string name="speed"> TEMPO </string>
+
+    <string name="save">ZAPISZ</string>
+    <string name="cancel">ANULUJ</string>
+
+    <string name="settings">USTAWIENIA</string>
 
 </resources>

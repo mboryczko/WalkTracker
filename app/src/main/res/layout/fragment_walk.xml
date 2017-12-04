@@ -1,58 +1,115 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="15dp"
-
+    android:orientation="vertical"
     android:id="@+id/container"
     tools:context="com.mjbor.ready.walk.view.WalkFragment"
     >
 
-    <TextView
-        android:id="@+id/timeTV"
-        android:text="0:00:00"
-        android:textSize="75dp"
+
+    <RelativeLayout
+        android:id="@+id/layout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
+        <ImageView
+            android:id="@+id/back1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/back1" />
 
-    <TextView
-        android:layout_below="@+id/timeTV"
-        android:id="@+id/distanceTV"
-        android:text="0.00 km"
-        android:textSize="60dp"
+        <TextView
+            android:layout_alignParentBottom="true"
+            android:background="#80000000"
+            android:gravity="center"
+            android:padding="5dp"
+            android:textColor="#fff"
+
+            android:id="@+id/timeTV"
+            android:text="0:00:00"
+            android:textSize="40dp"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
+        <ImageView
+            android:id="@+id/back2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/back2" />
 
+        <TextView
+            android:layout_alignParentBottom="true"
+            android:background="#80000000"
+            android:gravity="center"
+            android:padding="5dp"
+            android:textColor="#fff"
 
-    <TextView
-        android:layout_below="@+id/distanceTV"
-        android:id="@+id/averageSpeedTV"
-        android:text="0 km/h"
-        android:textSize="60dp"
+            android:id="@+id/distanceTV"
+            android:text="0 km"
+            android:textSize="40dp"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/back3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/back3" />
+
+        <TextView
+            android:layout_alignParentBottom="true"
+            android:background="#80000000"
+            android:gravity="center"
+            android:padding="5dp"
+            android:textColor="#fff"
+
+            android:id="@+id/averageSpeedTV"
+            android:text="0 km/h"
+            android:textSize="40dp"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            />
+    </RelativeLayout>
 
 
     <Button
-        android:id="@+id/startButton"
-        android:onClick="startButtonClicked"
-        android:drawableLeft="@drawable/ic_play_arrow_white_48dp"
-        android:text="@string/start"
-        android:textStyle="bold"
-        android:padding="10dp"
+        android:visibility="visible"
+        android:id="@+id/actionButton"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
         android:background="@color/colorPrimary"
+        android:onClick="actionButtonClicked"
+        android:padding="10dp"
+        android:text="@string/start"
         android:textColor="@color/colorWhite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="39dp" />
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
 
 
-</RelativeLayout>
+</LinearLayout>

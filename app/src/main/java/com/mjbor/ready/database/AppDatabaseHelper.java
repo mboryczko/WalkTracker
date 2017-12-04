@@ -14,15 +14,15 @@ import android.util.Log;
 
 public class AppDatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DB_NAME = "lastSeenPlacesDB";
+    private static final String DB_NAME = "lastWalksDB";
     private static final int DB_VERSION = 1;
 
-    public static final String TABLE_NAME = "PLACE";
+    public static final String TABLE_NAME = "WALKS";
     public static final String ID = "_id";
-    public static final String AVATAR = "avatar";
-    public static final String LNG = "lng";
-    public static final String LAT = "lat";
-    public static final String NAME = "name";
+    public static final String DISTANCE = "distance";
+    public static final String SECONDS = "seconds";
+    public static final String AVERAGE_SPEED = "average_speed";
+    public static final String WALK_DATE = "walk_date";
 
     public AppDatabaseHelper(Context context){
         super(context, DB_NAME, null, DB_VERSION);
@@ -44,17 +44,17 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
     private void updateMyDatabese(SQLiteDatabase db, int oldVersion, int newVersion)  {
         if(oldVersion < 1){
 
-            String placeTableCreation =
+            String walkTableCreation =
                     "CREATE TABLE " + TABLE_NAME + "( " +
-                            ID + " INTEGER PRIMARY KEY," +
-                            AVATAR + " TEXT," +
-                            LNG + " REAL," +
-                            LAT + " REAL," +
-                            NAME + " TEXT" +
+                            ID + " INTEGER PRIMARY KEY, " +
+                            DISTANCE + " REAL, " +
+                            SECONDS + " INTEGER, " +
+                            AVERAGE_SPEED + " REAL, " +
+                            WALK_DATE + " TEXT" +
                             ");";
 
             try{
-                db.execSQL(placeTableCreation);
+                db.execSQL(walkTableCreation);
 
             }
             catch(SQLiteException e){
